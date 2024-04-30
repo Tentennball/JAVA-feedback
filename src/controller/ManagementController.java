@@ -24,31 +24,33 @@ public class ManagementController {
                 OutputView.printMenuBar();
                 String cmd = InputView.readMenuBarCmd(scan);
                 Validate.isValidCmd(cmd);
-                switch (cmd) {
-                    case "1"://학생 등록
+                ServiceName selectedService = ServiceName.valueOf(cmd.toUpperCase());
+                switch (selectedService) {
+                    case REGISTER://학생 등록
                         OutputView.printRegister();
                         StudentDTO studentDTO = inputStudent(scan);//
                         managementService.createStudent(studentDTO);
                         break;
-                    case "2"://학생 정보 출력
+                    case PRINT_INFO://학생 정보 출력
                         List<StudentDTO> studentsDTO = managementService.findAll();
                         OutputView.printAllStudents(studentsDTO);
                         break;
-                    case "3"://학생 찾기
+                    case SEARCH://학생 찾기
                         OutputView.printSearchSubject();
                         StudentDTO searchStudentDTO = managementService.findStudent(scan);
                         OutputView.printSearchedStudent(searchStudentDTO);
                         break;
-                    case "4"://학생 정보 수정
+                    case EDIT://학생 정보 수정
                         OutputView.printEditSubject();
                         StudentDTO editStudentDTO = managementService.findStudent(scan);
-                        managementService.editStudent(editStudentDTO, scan);
+                        String editCmd = InputView.readEditCmd(scan);
+                        managementService.editStudent(editStudentDTO, editCmd, scan);
                         break;
-                    case "5"://학생 삭제
-                        OutputView.printDeleteSubject();
+                    case DELETE://학생 삭제
                         managementService.deleteStudent(scan);
+                        OutputView.printDeleteSubject();
                         break;
-                    case "6"://종료
+                    case EXIT://종료
                         OutputView.printExit();
                         return;
                     default:

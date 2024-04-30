@@ -5,9 +5,9 @@ import dto.GradeDTO;
 
 public class Grade
 {
-    private int koreanGrade;
-    private int englishGrade;
-    private int mathGrade;
+    private final int koreanGrade;
+    private final int englishGrade;
+    private final int mathGrade;
     private double average;
     protected Grade(GradeDTO gradeDTO){
         this.koreanGrade = gradeDTO.getKoreanGrade();

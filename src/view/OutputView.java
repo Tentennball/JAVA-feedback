@@ -10,9 +10,9 @@ public class OutputView {
     private static final String WRONG_INPUT_MSG = "잘못된 입력입니다.\n";
     private static final String STUDENT_REGISTER_PRINT = "\n<학생 등록>";
 
-    public static final String STUDENT_SEARCH_PRINT = "\n<학생 검색>";
-    public static final String STUDENT_EDIT_PRINT = "\n<학생 수정>";
-    public static final String STUDENT_DELETE_PRINT = "\n<학생 삭제>";
+    private static final String STUDENT_SEARCH_PRINT = "\n<학생 검색>";
+    private static final String STUDENT_EDIT_PRINT = "\n<학생 수정>";
+    private static final String STUDENT_DELETE_PRINT = "\n<학생 삭제>";
     private static final String STUDENT_INFO_PRINT_FORMAT = "- %s\n학번 : %d\n국어성적 : %3d, 영어성적 : %3d, 수학성적 : %3d\n평균 : %f\n\n";
     private static final String NO_STUDENTS = "학생 등록 후 사용가능합니다.\n";
     public static void printMenuBar() {

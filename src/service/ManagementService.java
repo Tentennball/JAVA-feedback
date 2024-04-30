@@ -1,5 +1,7 @@
 package service;
 
+import controller.EditType;
+
 import view.InputView;
 import view.OutputView;
 import domain.Grade;
@@ -30,31 +32,31 @@ public class ManagementService {
         return new StudentDTO(student.getStdId(), student.getName(), new GradeDTO(grade));
     }
 
-    public void editStudent(StudentDTO studentDTO, Scanner scan){
+    public void editStudent(StudentDTO studentDTO, String editCmd, Scanner scan){
         Grade grade = studentDTO.getGrade();
-        String editCmd = InputView.readEditCmd(scan);
         Validate.isValidCmd(editCmd);
-        switch (editCmd){
-            case "1":
+        EditType cmd = EditType.valueOf(editCmd.toUpperCase());
+        switch (cmd){
+            case CHANGE_NAME:
                 String name = InputView.readStudentName(scan);
                 studentDTO.setName(name);
                 break;
-            case "2":
+            case CHANGE_KOREAN_GRADE:
                 int koreanGrade = Integer.parseInt(InputView.readKoreanGrade(scan));
                 grade.setKoreanGrade(koreanGrade);
                 studentDTO.setGrade(grade);
                 break;
-            case "3":
+            case CHANGE_ENGLISH_GRADE:
                 int englishGrade = Integer.parseInt(InputView.readEnglishGrade(scan));
                 grade.setEnglishGrade(englishGrade);
                 studentDTO.setGrade(grade);
                 break;
-            case "4":
+            case CHANGE_MATH_GRADE:
                 int mathGrade = Integer.parseInt(InputView.readMathGrade(scan));
                 grade.setMathGrade(mathGrade);
                 studentDTO.setGrade(grade);
                 break;
-            case "5":
+            case EXIT:
                 return;
             default:
                 OutputView.printWrong();

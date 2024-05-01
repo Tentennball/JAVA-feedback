@@ -1,7 +1,6 @@
 package repository;
 
 import domain.Student;
-import dto.StudentDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +19,12 @@ public class StudentsRepository {
         return students.get(searchStdId);
     }
 
-    public List<StudentDTO> findAll(){
-        List<StudentDTO> studentsDTO= new ArrayList<>();
+    public List<Student> findAll(){
+        List<Student> findStudents= new ArrayList<>();
         for (Map.Entry<Integer, Student> entrySet : students.entrySet()) {
-            studentsDTO.add(new StudentDTO(entrySet.getValue()));
+            findStudents.add(new Student(entrySet.getValue()));
         }
-        return studentsDTO;
+        return findStudents;
     }
 
     public void delete(int stdId){

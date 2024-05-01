@@ -1,18 +1,18 @@
 package controller;
 
-import view.ErrorView;
+import domain.Student;
+import view.ErrorMessage;
 import view.InputView;
 import view.OutputView;
-import dto.GradeDTO;
-import dto.StudentDTO;
+import dto.GradeDto;
+import dto.StudentDto;
 import service.ManagementService;
-import validate.Validate;
 import java.util.List;
 import java.util.Scanner;
 
 public class ManagementController {
     ManagementService managementService;
-    private static final Scanner scan = new Scanner(System.in);
+    private final Scanner scan = new Scanner(System.in);
 
     public ManagementController() {
         managementService = new ManagementService();
@@ -22,39 +22,40 @@ public class ManagementController {
         while (true) {
             try {
                 OutputView.printMenuBar();
-                String cmd = InputView.readMenuBarCmd(scan);
-                Validate.isValidCmd(cmd);
-                ServiceName selectedService = ServiceName.valueOf(cmd.toUpperCase());
-                switch (selectedService) {
-                    case REGISTER://학생 등록
+                ServiceName cmd = InputView.readMenuBarCmd(scan);
+                switch (cmd) {
+                    case REGISTER:
                         OutputView.printRegister();
-                        StudentDTO studentDTO = inputStudent(scan);//
-                        managementService.createStudent(studentDTO);
+                        StudentDto studentDTO = generateStudentInfo(scan);//
+                        managementService.createStudent(studentDTO, false);
                         break;
-                    case PRINT_INFO://학생 정보 출력
-                        List<StudentDTO> studentsDTO = managementService.findAll();
-                        OutputView.printAllStudents(studentsDTO);
+                    case PRINT_INFO:
+                        List<Student> students = managementService.findAll();
+                        OutputView.printAllStudents(students);
                         break;
-                    case SEARCH://학생 찾기
+                    case SEARCH:
                         OutputView.printSearchSubject();
-                        StudentDTO searchStudentDTO = managementService.findStudent(scan);
-                        OutputView.printSearchedStudent(searchStudentDTO);
+                        String searchStdId = InputView.readStudentID(scan);
+                        StudentDto searchStudentDto = managementService.findStudent(searchStdId);
+                        OutputView.printSearchedStudent(searchStudentDto);
                         break;
-                    case EDIT://학생 정보 수정
+                    case EDIT:
                         OutputView.printEditSubject();
-                        StudentDTO editStudentDTO = managementService.findStudent(scan);
-                        String editCmd = InputView.readEditCmd(scan);
-                        managementService.editStudent(editStudentDTO, editCmd, scan);
+                        String editStdId = InputView.readStudentID(scan);
+                        StudentDto editStudentDto = managementService.findStudent(editStdId);
+                        EditType editCmd = InputView.readEditCmd(scan);
+                        managementService.editStudent(editStudentDto, editCmd, scan);
                         break;
-                    case DELETE://학생 삭제
-                        managementService.deleteStudent(scan);
+                    case DELETE:
+                        String deleteStdId = InputView.readStudentID(scan);
+                        managementService.deleteStudent(deleteStdId);
                         OutputView.printDeleteSubject();
                         break;
-                    case EXIT://종료
+                    case EXIT:
                         OutputView.printExit();
                         return;
                     default:
-                        OutputView.printWrong();
+                        throw new IllegalArgumentException(ErrorMessage.NOT_VALID_INPUT_CMD);
                 }
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
@@ -62,17 +63,17 @@ public class ManagementController {
         }
     }
 
-    public StudentDTO inputStudent(Scanner scan) {
+    private StudentDto generateStudentInfo(Scanner scan) {
         try {
             int stdId = Integer.parseInt(InputView.readStudentID(scan));
             String name = InputView.readStudentName(scan);
             int koreanGrade = Integer.parseInt(InputView.readKoreanGrade(scan));
             int englishGrade = Integer.parseInt(InputView.readEnglishGrade(scan));
             int mathGrade = Integer.parseInt(InputView.readMathGrade(scan));
-            GradeDTO gradeDTO = new GradeDTO(koreanGrade, englishGrade, mathGrade);
-            return new StudentDTO(stdId, name, gradeDTO);
+            GradeDto gradeDTO = new GradeDto(koreanGrade, englishGrade, mathGrade);
+            return new StudentDto(stdId, name, gradeDTO);
         } catch (Exception e) {
-            throw new IllegalArgumentException(ErrorView.NOT_VALID_INPUT_CMD);
+            throw new IllegalArgumentException(ErrorMessage.NOT_VALID_INPUT_CMD);
         }
     }
 

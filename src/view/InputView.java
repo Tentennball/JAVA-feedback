@@ -1,5 +1,8 @@
 package view;
 
+import controller.EditType;
+import controller.ServiceName;
+
 import java.util.Scanner;
 
 public class InputView {
@@ -11,9 +14,13 @@ public class InputView {
     private static final String MATH_GRADE_INPUT = "수학성적 입력 : ";
     private static final String EDIT_LIST = "수정항목 선택\n1. 이름, 2. 국어성적, 3. 영어성적, 4. 수학성적, 5. 메인메뉴 이동";
 
-    public static String readMenuBarCmd(Scanner scan){
+    public static ServiceName readMenuBarCmd(Scanner scan){
         System.out.print(MENU_BAR_INPUT);
-        return scan.nextLine();
+        try {
+            return ServiceName.from(Integer.parseInt(scan.nextLine()));
+        }catch (NumberFormatException e){
+            throw new NumberFormatException(ErrorMessage.NOT_VALID_INPUT_CMD);
+        }
     }
 
     public static String readStudentID(Scanner scan){
@@ -38,9 +45,13 @@ public class InputView {
         System.out.print(MATH_GRADE_INPUT);
         return scan.nextLine();
     }
-    public static String readEditCmd(Scanner scan){
-        System.out.println(EDIT_LIST);
-        return scan.nextLine();
+    public static EditType readEditCmd(Scanner scan){
+        System.out.print(EDIT_LIST);
+        try {
+            return EditType.from(Integer.parseInt(scan.nextLine()));
+        }catch (NumberFormatException e){
+            throw new NumberFormatException(ErrorMessage.NOT_VALID_INPUT_CMD);
+        }
     }
 
 }

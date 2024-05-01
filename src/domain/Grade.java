@@ -1,21 +1,30 @@
 package domain;
 
-import constant.GradeConstant;
-import dto.GradeDTO;
+import dto.GradeDto;
 
 public class Grade
 {
     private final int koreanGrade;
     private final int englishGrade;
     private final int mathGrade;
-    private double average;
-    protected Grade(GradeDTO gradeDTO){
+    final int SUBJECT_CONUT = 3;
+
+    protected Grade(GradeDto gradeDTO){
         this.koreanGrade = gradeDTO.getKoreanGrade();
         this.englishGrade = gradeDTO.getEnglishGrade();
         this.mathGrade = gradeDTO.getMathGrade();
-        setAverage();
     }
-    public static Grade fromDTO(GradeDTO gradeDTO){
+    public Grade(int koreanGrade, int englishGrade, int mathGrade){
+        this.koreanGrade = koreanGrade;
+        this.englishGrade = englishGrade;
+        this.mathGrade = mathGrade;
+    }
+    public Grade(Grade grade){
+        this.koreanGrade = grade.getKoreanGrade();
+        this.englishGrade = grade.getEnglishGrade();
+        this.mathGrade = grade.getMathGrade();
+    }
+    public static Grade fromDTO(GradeDto gradeDTO){
         return new Grade(gradeDTO);
     }
 
@@ -30,23 +39,19 @@ public class Grade
         return mathGrade;
     }
 
-    public void setAverage() {
-        this.average = (double)(koreanGrade + englishGrade + mathGrade) / GradeConstant.SUBJECT_CONUT;
+
+    public Grade changeKoreanGrade(int koreanGrade) {
+        return new Grade(koreanGrade, this.englishGrade, this.mathGrade);
     }
 
-    public void setKoreanGrade(int koreanGrade) {
-        this.koreanGrade = koreanGrade;
-        setAverage();
+    public Grade changeEnglishGrade(int englishGrade) {
+        return new Grade(this.koreanGrade, englishGrade, this.mathGrade);
     }
 
-    public void setEnglishGrade(int englishGrade) {
-        this.englishGrade = englishGrade;
-        setAverage();
+    public Grade changeMathGrade(int mathGrade) {
+        return new Grade(this.koreanGrade, this.englishGrade, mathGrade);
     }
-
-    public void setMathGrade(int mathGrade) {
-        this.mathGrade = mathGrade;
-        setAverage();
+    public Double calculateAverage(){
+        return ((double)(getKoreanGrade()+getEnglishGrade()+getMathGrade()))/SUBJECT_CONUT;
     }
-
 }
